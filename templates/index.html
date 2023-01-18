@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/bootstrap-icons.css">
+    <style>
+        .x1{
+            background-color: #B2B2B2;
+        }
+        .x1:nth-child(odd){
+            align-self: self-end;
+        }
+        .x1-mn{
+            margin: -1px;
+        }
+        .x1-border{
+            border: 1rem solid black;
+            border-top: 0;
+            border-bottom: 0;
+        }   
+        .x1-border-b0{
+            border: 1rem solid black;
+            border-top: 0;
+        }  
+        .x1-bg-warning{
+            background-color: #FF7000 !important;
+        }   
+        .x1-bg-secondary{
+            background-color: #D6E4E5 !important;
+        }
+        .x1-text-warning{
+            color: #FF7000 !important;
+        }
+    </style>
+  </head>
+  <body>
+    <main class="container-fluid">
+        <h2 class="text-center x1-text-warning">Smart Charging Cart</h2>
+        <div class="row mb-4">
+            <div class="col-lg-6 col-sm-12 my-2">
+                <div class="row mb-2">
+                    <div class="col-10">
+                        <h2 class="text-center mt-3">FRONT <span class="badge bg-success">ON</span></h2>
+                    </div>
+                    <div class="col-2" style="margin-left: -100px">
+                        <div class="d-flex flex-column align-items-center">
+                            <div class="rounded-circle bg-warning" style="width: 45px;height: 45px;"></div> 
+                            <div class="bg-warning" style="width: 20px; height: 30px; margin-top: -25px">
+                            </div>
+                            <div class="bg-dark mx-auto" style="width: 25px; height: 4px;"></div>
+                            <div class="d-flex">
+                            <div class="bg-dark me-3" style="width: 3px;height: 4px;"></div>
+                            <div class="bg-dark" style="width: 3px;height: 4px;"></div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-column">
+                    {% for key, value in data["front"].items() %}
+                    {% if value | length > 0 %}
+                    <div class="p-1 bg-secondary x1-border"></div>
+                    <div class="bg-dark d-flex px-4 x1-border" style="height: 50px;">
+                        {% for i in value %}
+                        <div class="flex-fill x1 fs-5 d-flex flex-column justify-content-center align-items-center" style="height: 25px"><i class="bi bi-outlet"></i></div>
+                        {% endfor %}
+                    </div>
+                    <div class="d-flex px-4 x1-border pt-1">
+                        {% for i in range(value|length) %}
+                        <div class="flex-fill d-flex flex-column"><div class="fs-6 bg-danger border border-dark text-center mb-4">{{"{:02d}".format(value[i]["Value"] | int)}}</div><div class="fs-6 x1-bg-warning border border-dark text-center">{{"{:02d}".format(i+1)}}</div></div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    <div class="p-1 bg-secondary x1-border"></div>
+                    <div class="py-4 x1-border-b0"></div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <div class="d-flex flex-column align-items-center mx-3">
+                        <div class="bg-dark" style="height: 7px; width: 5px"></div>
+                        <div class="border border-2 border-dark rounded-top border-bottom-0" style="height:20px; width: 20px">
+                            <div class="bg-danger mx-auto mt-1 rounded" style="height:30px; width: 10px">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column align-items-center mx-3">
+                        <div class="bg-dark" style="height: 7px; width: 5px"></div>
+                        <div class="border border-2 border-dark rounded-top border-bottom-0" style="height:20px; width: 20px">
+                            <div class="bg-danger mx-auto mt-1 rounded" style="height:30px; width: 10px">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-sm-12 my-2">
+                <div class="row mb-2">
+                    <div class="col-10">
+                        <h2 class="text-center mt-3">BACK <span class="badge bg-danger">OFF</span></h2>
+                    </div>
+                    <div class="col-2" style="margin-left: -100px">
+                        <div class="d-flex flex-column align-items-center">
+                            <div class="rounded-circle x1-bg-secondary" style="width: 45px;height: 45px;"></div> 
+                            <div class="x1-bg-secondary" style="width: 20px; height: 30px; margin-top: -25px">
+                            </div>
+                            <div class="bg-dark mx-auto" style="width: 25px; height: 4px;"></div>
+                            <div class="d-flex">
+                            <div class="bg-dark me-3" style="width: 3px;height: 4px;"></div>
+                            <div class="bg-dark" style="width: 3px;height: 4px;"></div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-column">
+                    {% for key, value in data["back"].items() %}
+                    {% if value | length > 0 %}
+                    <div class="p-1 bg-secondary x1-border"></div>
+                    <div class="bg-dark d-flex px-4 x1-border" style="height: 50px;">
+                        {% for i in value %}
+                        <div class="flex-fill x1 fs-5 d-flex flex-column justify-content-center align-items-center" style="height: 25px"><i class="bi bi-outlet"></i></div>
+                        {% endfor %}
+                    </div>
+                    <div class="d-flex px-4 x1-border pt-1">
+                        {% for i in range(value|length) %}
+                        <div class="flex-fill d-flex flex-column"><div class="fs-6 bg-danger border border-dark text-center mb-4">{{"{:02d}".format(value[i]["Value"] | int)}}</div><div class="fs-6 x1-bg-warning border border-dark text-center">{{"{:02d}".format(i+1)}}</div></div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    <div class="p-1 bg-secondary x1-border"></div>
+                    <div class="py-4 x1-border-b0"></div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <div class="d-flex flex-column align-items-center mx-3">
+                        <div class="bg-dark" style="height: 7px; width: 5px"></div>
+                        <div class="border border-2 border-dark rounded-top border-bottom-0" style="height:20px; width: 20px">
+                            <div class="bg-danger mx-auto mt-1 rounded" style="height:30px; width: 10px">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column align-items-center mx-3">
+                        <div class="bg-dark" style="height: 7px; width: 5px"></div>
+                        <div class="border border-2 border-dark rounded-top border-bottom-0" style="height:20px; width: 20px">
+                            <div class="bg-danger mx-auto mt-1 rounded" style="height:30px; width: 10px">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="/static/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
