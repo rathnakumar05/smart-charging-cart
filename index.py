@@ -5,11 +5,23 @@ from flask import Flask, render_template, send_from_directory
 
 app = Flask(__name__)
 
+desired_order = [114990191666836, 61797658713100, 259872926915596, 132183582759948, 189692557846164, 123781989721748, 206757083143180]
+
 def readFile():
     content = None
     with open(os.path.join(app.root_path, 'result.json'), "r") as file:
         content = file.read()
     return content
+
+def orderData(data):
+    print("Before Sort")
+    print(data)
+    print("==================================================================")
+    data = [el for el in data if el["DeviceID"] in desired_order]
+    data = sorted(data, key=lambda x: desired_order.index(x["DeviceID"]))
+    print("After Sort")
+    print(data)
+    return data
 
 def parseData(data):
     parsed_data = {
@@ -45,6 +57,7 @@ def index():
     if content is not None:
         data = json.loads(content)
         data = data["data"]
+    data = orderData(data)
     data = parseData(data)
 
     return render_template('index.html', data=data)
