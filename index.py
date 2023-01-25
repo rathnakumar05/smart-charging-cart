@@ -30,7 +30,6 @@ def parseData(data):
     }
     if data != None:
         data = [data[i:i+3] for i in range(0, len(data), 3)]
-
         for i in range(len(data)):
             front = []
             back = []
@@ -55,9 +54,13 @@ def index():
     content = data = None
     content = readFile()
     if content is not None:
-        data = json.loads(content)
-        data = data["data"]
-    data = orderData(data)
+        try:
+            data = json.loads(content)
+            data = data["data"]
+        except:
+            print("JSON ERROR")
+    if data is not None:
+        data = orderData(data)
     data = parseData(data)
 
     return render_template('index.html', data=data)
