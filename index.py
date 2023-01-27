@@ -33,14 +33,16 @@ def parseData(data):
         for i in range(len(data)):
             front = []
             back = []
-            if len(data[i])>=3:
-                front = [*data[i][0]["TempData"], *data[i][1]["TempData"][0:8]]
-                back = [*data[i][1]["TempData"][8:], *data[i][2]["TempData"]]
-            elif len(data[i])>=1:
-                front = [*data[i][0]["TempData"]]
-                if len(data[i])>1:
-                    front = [*front, *data[i][1]["TempData"][0:8]]
-                    back = data[i][1]["TempData"][8:]
+            if len(data[i])==3:
+                front = [*data[i][0]["TempData"][0:8], *data[i][1]["TempData"][0:8], *data[i][2]["TempData"][0:8]]
+                back = [*data[i][2]["TempData"][8:16], *data[i][1]["TempData"][8:16], *data[i][0]["TempData"][8:16]]
+            elif len(data[i])==2:
+               front = [*data[i][0]["TempData"][0:8], *data[i][1]["TempData"][0:8]]
+               back = [*data[i][1]["TempData"][8:16], *data[i][0]["TempData"][8:16]]
+            else:
+                front = [*data[i][0]["TempData"][0:8]]
+                back = [*data[i][0]["TempData"][8:16]]
+            
             parsed_data["front"]["row"+str(i)] = front
             parsed_data["back"]["row"+str(i)] = back
     return parsed_data
