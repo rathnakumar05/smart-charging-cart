@@ -1,11 +1,14 @@
 import os
 import re
 import json
+import datetime
 from flask import Flask, render_template, send_from_directory
+from waitress import serve
 
 app = Flask(__name__)
 
 desired_order = [114990191666836, 61797658713100, 259872926915596, 132183582759948, 189692557846164, 123781989721748, 206757083143180]
+on_off_minutes = 5
 
 def readFile():
     content = None
@@ -54,6 +57,8 @@ def favicon():
 @app.route("/")
 def index():
     content = data = None
+    last_updated = []
+    status = "OFF"
     content = readFile()
     if content is not None:
         try:
@@ -63,10 +68,20 @@ def index():
             print("JSON ERROR")
     if data is not None:
         data = orderData(data)
+        last_updated = [{"DeviceID": el["DeviceID"], "LastUpdated": el["LastUpdated"]} for el in data]
     data = parseData(data)
 
-    return render_template('index.html', data=data)
+    current_time = datetime.datetime.now()
+    if last_updated is not None and len(last_updated) > 0:
+        updated_time = datetime.datetime.strptime(str(last_updated[0]["LastUpdated"]), "%Y-%m-%d %H:%M:%S")
+        diff_time = current_time - updated_time
+        if(diff_time.total_seconds() / 60 <= on_off_minutes):
+            status = "ON"
+    current_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
+
+    return render_template('index.html', data=data, last_updated=last_updated, current_time=current_time, status=status)
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # app.run(debug=True)
+    serve(app, host='0.0.0.0', port=5000)

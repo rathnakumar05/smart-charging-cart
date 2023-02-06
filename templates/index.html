@@ -38,14 +38,22 @@
   </head>
   <body>
     <main class="container-fluid">
-        <h2 class="text-center x1-text-warning">Smart Charging Cart</h2>
+        <div class="d-flex justify-content-between align-self-baseline mt-2">
+            <button class="btn btn-dark p-1">Today date : {{current_time}} <span class="badge {% if status=='ON' %}bg-success{% else %}bg-danger{% endif %} fs-6">{{status}}</span></button>
+            <h2 class="text-center x1-text-warning m-0">Smart Charging Cart</h2>
+            {% if last_updated | length > 0 %}
+            <button class="btn btn-dark p-1">Last updated date : {{last_updated[0]["LastUpdated"]}}</button>
+            {% else %}
+            <button class="btn btn-dark p-1 invisible">{{current_time}}</button>
+            {% endif %}
+        </div>
         <div class="row mb-4">
             <div class="col-lg-6 col-sm-12 my-2">
                 <div class="row mb-2">
-                    <div class="col-10">
-                        <h2 class="text-center mt-3">FRONT <span class="badge bg-success">ON</span></h2>
-                    </div>
-                    <div class="col-2" style="margin-left: -100px">
+                    <!-- <div class="col-10"> -->
+                        <h2 class="text-center mt-3">FRONT</h2>
+                    <!-- </div> -->
+                    <!-- <div class="col-2" style="margin-left: -100px">
                         <div class="d-flex flex-column align-items-center">
                             <div class="rounded-circle bg-warning" style="width: 45px;height: 45px;"></div> 
                             <div class="bg-warning" style="width: 20px; height: 30px; margin-top: -25px">
@@ -56,7 +64,7 @@
                             <div class="bg-dark" style="width: 3px;height: 4px;"></div>
                           </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="d-flex flex-column">
                     {% for key, value in data["front"].items() %}
@@ -69,7 +77,7 @@
                     </div>
                     <div class="d-flex px-4 x1-border pt-1 flex-wrap">
                         {% for i in range(value|length) %}
-                        <div class="flex-fill d-flex flex-column {% if value[i]['Value'] | float < 45 %}invisible{% endif %}"><div class="fs-6 bg-danger border border-dark text-center mb-4">{{"{:02d}".format(value[i]["Value"] | int)}}</div><div class="fs-6 x1-bg-warning border border-dark text-center">{{"{:02d}".format(i+1)}}</div></div>
+                        <div class="flex-fill d-flex flex-column {% if value[i]['Value'] | float < 0 %}invisible{% endif %}"><div class="fs-6 bg-danger border border-dark text-center mb-4">{{"{:02d}".format(value[i]["Value"] | int)}}</div><div class="fs-6 x1-bg-warning border border-dark text-center">{{"{:02d}".format(i+1)}}</div></div>
                         {% endfor %}
                     </div>
                     {% endif %}
@@ -96,10 +104,10 @@
             </div>
             <div class="col-lg-6 col-sm-12 my-2">
                 <div class="row mb-2">
-                    <div class="col-10">
-                        <h2 class="text-center mt-3">BACK <span class="badge bg-danger">OFF</span></h2>
-                    </div>
-                    <div class="col-2" style="margin-left: -100px">
+                    <!-- <div class="col-10"> -->
+                        <h2 class="text-center mt-3">BACK</h2>
+                    <!-- </div> -->
+                    <!-- <div class="col-2" style="margin-left: -100px">
                         <div class="d-flex flex-column align-items-center">
                             <div class="rounded-circle x1-bg-secondary" style="width: 45px;height: 45px;"></div> 
                             <div class="x1-bg-secondary" style="width: 20px; height: 30px; margin-top: -25px">
@@ -110,7 +118,7 @@
                             <div class="bg-dark" style="width: 3px;height: 4px;"></div>
                           </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="d-flex flex-column">
                     {% for key, value in data["back"].items() %}
@@ -123,7 +131,7 @@
                     </div>
                     <div class="d-flex flex-wrap px-4 x1-border pt-1">
                         {% for i in range(value|length) %}
-                        <div class="flex-fill d-flex flex-column {% if value[i]['Value'] | float < 45 %}invisible{% endif %}"><div class="fs-6 bg-danger border border-dark text-center mb-4">{{"{:02d}".format(value[i]["Value"] | int)}}</div><div class="fs-6 x1-bg-warning border border-dark text-center">{{"{:02d}".format(i+1)}}</div></div>
+                        <div class="flex-fill d-flex flex-column {% if value[i]['Value'] | float < 0 %}invisible{% endif %}"><div class="fs-6 bg-danger border border-dark text-center mb-4">{{"{:02d}".format(value[i]["Value"] | int)}}</div><div class="fs-6 x1-bg-warning border border-dark text-center">{{"{:02d}".format(i+1)}}</div></div>
                         {% endfor %}
                     </div>
                     {% endif %}
@@ -149,12 +157,49 @@
                 </div>
             </div>
         </div>
+        <div class="mb-4">
+              <button class="btn btn-dark" id="collapse-btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapse" aria-expanded="false" aria-controls="collapse">
+                Show last updated details
+              </button>
+              <div class="collapse mt-2" id="collapse">
+                <div class="card card-body d-inline-block">
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">Device ID</th>
+                            <th scope="col">Last updated</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for el in last_updated %}
+                          <tr>
+                            <th>{{el["DeviceID"]}}</th>
+                            <td>{{el["LastUpdated"]}}</td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+              </div>
+        </div>
     </main>
     <script src="/static/js/bootstrap.bundle.min.js"></script>
     <script>
         setTimeout(function(){
           window.location.reload(1);
         }, 10000);
+        const collapse = document.getElementById('collapse');
+        const collapse_btn = document.getElementById('collapse-btn');
+        collapse.addEventListener('hidden.bs.collapse', event => {
+          collapse_btn.innerHTML="Show last updated details";
+        });
+        collapse.addEventListener('shown.bs.collapse', event => {
+            collapse_btn.innerHTML="Hide last updated details";
+            window.scrollTo({
+              top: document.body.scrollHeight,
+              behavior: "smooth"
+            });
+        });
     </script>
   </body>
 </html>
