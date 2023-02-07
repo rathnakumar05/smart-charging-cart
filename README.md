@@ -20,3 +20,5 @@
 
 flask version : 1.0.2
 waitress version : 1.4.4
+
+<p align="center"><img src="https://user-images.githubusercontent.com/60918147/217249828-035bad85-a2ab-4a32-b713-4cddd4db5211.png" alt="smcart" width="500" align="center"/></p>
