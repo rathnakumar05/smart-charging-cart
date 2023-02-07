@@ -9,6 +9,7 @@ app = Flask(__name__)
 
 desired_order = [114990191666836, 61797658713100, 259872926915596, 132183582759948, 189692557846164, 123781989721748, 206757083143180]
 on_off_minutes = 5
+show_hide_temp = 10
 
 def readFile():
     content = None
@@ -79,7 +80,7 @@ def index():
             status = "ON"
     current_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
 
-    return render_template('index.html', data=data, last_updated=last_updated, current_time=current_time, status=status)
+    return render_template('index.html', data=data, last_updated=last_updated, current_time=current_time, status=status, show_hide_temp=show_hide_temp)
 
 
 if __name__ == '__main__':
