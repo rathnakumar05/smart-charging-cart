@@ -7,13 +7,17 @@ from waitress import serve
 
 app = Flask(__name__)
 
-desired_order = [114990191666836, 61797658713100, 259872926915596, 132183582759948, 189692557846164, 123781989721748, 206757083143180]
-on_off_minutes = 5
-show_hide_temp = 0
+config = None
+with open('config.json', 'r') as file:
+    config = json.load(file)
+
+desired_order = config.get("desired_order") if config.get("desired_order") is not None else [] 
+on_off_minutes = config.get("on_off_minutes") if config.get("on_off_minutes") is not None else 0
+show_hide_temp = config.get("show_hide_temp") if config.get("show_hide_temp") is not None else 0
 
 def readFile():
     content = None
-    with open(os.path.join(app.root_path, 'result.json'), "r") as file:
+    with open('result.json', "r") as file:
         content = file.read()
     return content
 
@@ -84,5 +88,5 @@ def index():
 
 
 if __name__ == '__main__':
-    # app.run(debug=True)
-    serve(app, host='0.0.0.0', port=5000)
+    app.run(debug=True)
+    # serve(app, host='0.0.0.0', port=5000)
